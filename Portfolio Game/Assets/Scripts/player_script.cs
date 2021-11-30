@@ -12,8 +12,9 @@ public class player_script : MonoBehaviour
     private CharacterController controller;
     private Vector3 velocity;
     private float speed = 10f;
-    private float sprintSpeed = 50f;
+    private float sprintSpeed = 15f;
     private float jumpSpeed = 8f;
+    private float airSpeed;
 
 
     //For testing the player is on the ground
@@ -32,15 +33,34 @@ public class player_script : MonoBehaviour
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
+            isJumping = false;
         }
 
         Vector3 forward = transform.TransformDirection(Vector3.forward);
-        controller.Move(forward * speed * Time.deltaTime);
+
+        bool pushRight = (Input.GetAxisRaw("Horizontal") > 0);
+        float moveSpeed;
+
+        if (isJumping)
+        {
+            moveSpeed = airSpeed;
+        }
+        else if (pushRight)
+        {
+            moveSpeed = sprintSpeed;
+        }
+        else
+        {
+            moveSpeed = speed;
+        }
+        
+        controller.Move(forward * moveSpeed * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = jumpSpeed;
-            //isJumping = true;
+            isJumping = true;
+            airSpeed = pushRight ? sprintSpeed : speed;
         }
 
         velocity.y += gravity * Time.deltaTime;
