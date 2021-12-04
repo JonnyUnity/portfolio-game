@@ -5,7 +5,7 @@ using UnityEngine;
 public class player_script : MonoBehaviour
 {
 
-    public float gravity = -9.81f;
+    public float gravity = -12f;
     public float jumpHeight = 3f;
 
     [SerializeField]
