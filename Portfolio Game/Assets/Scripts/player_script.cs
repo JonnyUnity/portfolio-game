@@ -24,8 +24,17 @@ public class player_script : MonoBehaviour
     bool isGrounded;
     bool isJumping = false;
 
+    public ParticleSystem dirtParticule;
+    public AudioClip jumpSound;
+    private AudioSource playerAudio;
 
-    // Update is called once per frame
+
+    void Start()
+    {
+        playerAudio = GetComponent<AudioSource>();
+    }
+
+
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -33,21 +42,31 @@ public class player_script : MonoBehaviour
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
-            isJumping = false;
+            isJumping = false;          
         }
 
         Vector3 forward = transform.TransformDirection(Vector3.forward);
 
         bool pushRight = (Input.GetAxisRaw("Horizontal") > 0);
         float moveSpeed;
+        var psMain = dirtParticule.main;
 
         if (pushRight && isGrounded)
         {
             moveSpeed = sprintSpeed;
+            psMain.startSize = 0.75f ;
+            psMain.startSpeed = 1f;
         }
         else
         {
             moveSpeed = speed;
+            psMain.startSize = 0.45f;
+            psMain.startSpeed = 0.2f;
+        }
+
+        if (!dirtParticule.isPlaying && isGrounded)
+        {
+            dirtParticule.Play();
         }
 
         controller.Move(forward * moveSpeed * Time.deltaTime);
@@ -56,12 +75,14 @@ public class player_script : MonoBehaviour
         {
             velocity.y = pushRight ? sprintJumpSpeed : jumpSpeed;
             isJumping = true;
-
+            dirtParticule.Stop();
+            playerAudio.PlayOneShot(jumpSound, 1.0f);
         }
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-
     }
+
+
 }
