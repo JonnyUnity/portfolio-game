@@ -32,11 +32,24 @@ public class player_script : MonoBehaviour
     void Start()
     {
         playerAudio = GetComponent<AudioSource>();
+        if (GameManager.Instance.Colour != null)
+        {
+            GameObject playerCube = gameObject.transform.Find("PlayerCube").gameObject;
+            playerCube.GetComponent<Renderer>().material.color = GameManager.Instance.Colour;
+        }
     }
 
 
     void Update()
     {
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    // game puased
+        //    Debug.Log("Game Paused");
+        //    GameManager.Instance.PauseGame();   
+        //}
+
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)

@@ -7,7 +7,7 @@ public class DeathPlaneScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(gameObject.name + " collided with " + collision.gameObject.name + " - " + collision.gameObject.tag);
+        //Debug.Log(gameObject.name + " collided with " + collision.gameObject.name + " - " + collision.gameObject.tag);
 
         //Destroy(gameObject);
 
